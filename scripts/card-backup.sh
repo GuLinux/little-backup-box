@@ -22,7 +22,8 @@ CONFIG="${CONFIG_DIR}/config.cfg"
 source "$CONFIG"
 
 # Set the ACT LED to heartbeat
-sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
+echo "waiting_hdd" > /tmp/led_mode
+#sudo sh -c "echo heartbeat > /sys/class/leds/'orangepi:red:power'/trigger"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
@@ -44,8 +45,9 @@ done
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
 # Set the ACT LED to blink at 1000ms to indicate that the storage device has been mounted
-sudo sh -c "echo timer > /sys/class/leds/led0/trigger"
-sudo sh -c "echo 1000 > /sys/class/leds/led0/delay_on"
+#sudo sh -c "echo timer > /sys/class/leds/'orangepi:red:power'/trigger"
+#sudo sh -c "echo 1000 > /sys/class/leds/'orangepi:red:power'/delay_on"
+echo "waiting_card" > /tmp/led_mode
 
 # If display support is enabled, notify that the storage device has been mounted
 if [ $DISP = true ]; then
@@ -69,7 +71,8 @@ if [ ! -z "${CARD_READER[0]}" ]; then
   mount /dev"/${CARD_READER[0]}" "$CARD_MOUNT_POINT"
 
   # Set the ACT LED to blink at 500ms to indicate that the card has been mounted
-  sudo sh -c "echo 500 > /sys/class/leds/led0/delay_on"
+  # sudo sh -c "echo 500 > /sys/class/leds/'orangepi:red:power'/delay_on"
+  echo "syncing" > /tmp/led_mode
 
   # Cancel shutdown
   sudo shutdown -c
@@ -95,7 +98,9 @@ if [ ! -z "${CARD_READER[0]}" ]; then
   # Set the backup path
   BACKUP_PATH="$STORAGE_MOUNT_POINT"/"$ID"
   # Perform backup using rsync
+  backup_started_ts="$( date +%s )"
   rsync -avh --info=progress2 --exclude "*.id" "$CARD_MOUNT_POINT"/ "$BACKUP_PATH"
+  echo "$(( $( date +%s) - $backup_started_ts ))" >> "$BACKUP_PATH/.backup_elapsed"
 fi
 
 # If display support is enabled, notify that the backup is complete

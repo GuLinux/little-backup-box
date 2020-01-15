@@ -22,7 +22,8 @@ CONFIG="${CONFIG_DIR}/config.cfg"
 source "$CONFIG"
 
 # Set the ACT LED to heartbeat
-sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
+echo "waiting_hdd" > /tmp/led_mode
+# sudo sh -c "echo heartbeat > /sys/class/leds/'orangepi:red:power'/trigger"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
@@ -44,6 +45,7 @@ done
 
 # Cancel shutdown
 sudo shutdown -c
+echo "waiting_card" > /tmp/led_mode
 
 # If display support is enabled, notify that the camera is detected
 if [ $DISP = true ]; then
@@ -62,7 +64,10 @@ mkdir -p "$STORAGE_MOUNT_POINT"
 # Switch to STORAGE_MOUNT_POINT and transfer files from the camera
 # Rename the transferred files using the YYYYMMDD-HHMMSS format
 cd "$STORAGE_MOUNT_POINT"
+echo "syncing" > /tmp/led_mode
+backup_started_ts="$( date +%s )"
 gphoto2 --get-all-files --skip-existing
+echo "$(( $( date +%s) - $backup_started_ts ))" >> ".backup_elapsed"
 
 # If display support is enabled, notify that the backup is complete
 if [ $DISP = true ]; then

@@ -34,7 +34,7 @@ curl https://rclone.org/install.sh | sudo bash
 # Read user
 USER="$1"
 if [ -z "$USER" ]; then
-    USER="pi"
+    USER="orangepi"
 fi
 
 # Create the required directories
@@ -95,7 +95,7 @@ crontab -l | { cat; echo "*/5 * * * * sudo /home/"$USER"/little-backup-box/scrip
 # Configure Samba
 sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.orig
 pw="raspberry"
-(echo $pw; echo $pw ) | sudo smbpasswd -s -a pi
+(echo $pw; echo $pw ) | sudo smbpasswd -s -a orangepi
 sudo sh -c "echo '### Global Settings ###' > /etc/samba/smb.conf"
 sudo sh -c "echo '[global]' >> /etc/samba/smb.conf"
 sudo sh -c "echo 'workgroup = WORKGROUP' >> /etc/samba/smb.conf"
@@ -110,7 +110,7 @@ sudo sh -c "echo 'panic action = /usr/share/samba/panic-action %d' >> /etc/samba
 sudo sh -c "echo '### Authentication ###' >> /etc/samba/smb.conf"
 sudo sh -c "echo 'security = user' >> /etc/samba/smb.conf"
 sudo sh -c "echo 'map to guest = Bad User' >> /etc/samba/smb.conf"
-sudo sh -c "echo 'guest account = pi' >> /etc/samba/smb.conf"
+sudo sh -c "echo 'guest account = orangepi' >> /etc/samba/smb.conf"
 sudo sh -c "echo '### Share Definitions ###' >> /etc/samba/smb.conf"
 sudo sh -c "echo '[little-backup-box]' >> /etc/samba/smb.conf"
 sudo sh -c "echo 'comment = Little Backup Box /media/storage' >> /etc/samba/smb.conf"

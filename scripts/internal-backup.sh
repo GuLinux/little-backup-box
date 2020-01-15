@@ -23,7 +23,7 @@ CONFIG="${CONFIG_DIR}/config.cfg"
 source "$CONFIG"
 
 # Set the ACT LED to heartbeat
-sudo sh -c "echo heartbeat > /sys/class/leds/led0/trigger"
+sudo sh -c "echo heartbeat > /sys/class/leds/'orangepi:red:power'/trigger"
 
 # Shutdown after a specified period of time (in minutes) if no device is connected.
 sudo shutdown -h $SHUTD "Shutdown is activated. To cancel: sudo shutdown -c"
@@ -46,8 +46,8 @@ done
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
 # Set the ACT LED to blink at 1000ms to indicate that the card reader has been mounted
-sudo sh -c "echo timer > /sys/class/leds/led0/trigger"
-sudo sh -c "echo 1000 > /sys/class/leds/led0/delay_on"
+sudo sh -c "echo timer > /sys/class/leds/'orangepi:red:power'/trigger"
+sudo sh -c "echo 1000 > /sys/class/leds/'orangepi:red:power'/delay_on"
 
 # Cancel shutdown
 sudo shutdown -c

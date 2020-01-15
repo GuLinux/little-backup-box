@@ -33,8 +33,9 @@ done
 mount /dev/"$STORAGE_DEV" "$STORAGE_MOUNT_POINT"
 
 # Set the ACT LED to blink at 1000ms to indicate that the storage device has been mounted
-sudo sh -c "echo timer > /sys/class/leds/led0/trigger"
-sudo sh -c "echo 1000 > /sys/class/leds/led0/delay_on"
+echo "on" > /tmp/led_mode
+# sudo sh -c "echo timer > /sys/class/leds/'orangepi:red:power'/trigger"
+# sudo sh -c "echo 1000 > /sys/class/leds/'orangepi:red:power'/delay_on"
 
 # Reload minidlna
 
